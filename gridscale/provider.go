@@ -10,19 +10,19 @@ import (
 func Provider() terraform.ResourceProvider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
-			"api_url": &schema.Schema{
+			"api_url": {
 				Type:        schema.TypeString,
 				Required:    true,
 				DefaultFunc: schema.EnvDefaultFunc("GRIDSCALE_API_URL", nil),
 				Description: "",
 			},
-			"api_token": &schema.Schema{
+			"api_token": {
 				Type:        schema.TypeString,
 				Required:    true,
 				DefaultFunc: schema.EnvDefaultFunc("GRIDSCALE_API_TOKEN", nil),
 				Description: "",
 			},
-			"user_uuid": &schema.Schema{
+			"user_uuid": {
 				Type:        schema.TypeString,
 				Required:    true,
 				DefaultFunc: schema.EnvDefaultFunc("GRIDSCALE_USER_UUID", nil),
@@ -31,8 +31,7 @@ func Provider() terraform.ResourceProvider {
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
-			"gridscale_server":  resourceGridScaleServer(),
-			"gridscale_network": resourceGridScaleNetwork(),
+			"gridscale_server": resourceGridScaleServer(),
 		},
 
 		ConfigureFunc: providerConfigure,
@@ -41,9 +40,9 @@ func Provider() terraform.ResourceProvider {
 
 func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	config := &Config{
-		API_URL:   d.Get("api_url").(string),
-		API_TOKEN: d.Get("api_token").(string),
-		USER_UUID: d.Get("user_uuid").(string),
+		Endpoint:  d.Get("api_url").(string),
+		AuthToken: d.Get("api_token").(string),
+		UserId:    d.Get("user_uuid").(string),
 	}
 
 	err := config.CreateClient()

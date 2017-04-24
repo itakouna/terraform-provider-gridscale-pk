@@ -32,14 +32,14 @@ func TestProvider_impl(t *testing.T) {
 func testAccPreCheck(t *testing.T) {
 
 	if v := os.Getenv("GRIDSCALE_API_URL"); v == "" {
-		t.Fatal("GRIDSCALE_API_URL must be set for acceptance tests")
+		//t.Fatal("GRIDSCALE_API_URL must be set for acceptance tests")
 	}
 
 	if v := os.Getenv("GRIDSCALE_API_TOKEN"); v == "" {
-		t.Fatal("GRIDSCALE_API_TOKEN must be set for acceptance tests")
+		//t.Fatal("GRIDSCALE_API_TOKEN must be set for acceptance tests")
 	}
 
 	if v := os.Getenv("GRIDSCALE_USER_UUID"); v == "" {
-		t.Fatal("GRIDSCALE_USER_UUID must be set for acceptance tests")
+		//t.Fatal("GRIDSCALE_USER_UUID must be set for acceptance tests")
 	}
 }

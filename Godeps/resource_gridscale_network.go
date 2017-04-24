@@ -1,4 +1,4 @@
-package gridscale
+package Godeps
 
 import (
 	"github.com/hashicorp/terraform/helper/schema"

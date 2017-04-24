@@ -21,7 +21,7 @@ func (c *Config) CreateClient() error {
 		return nil
 	}
 
-	client, err := gridscale.NewClient(c.Endpoint, c.UserId, c.AuthToken)
+	client, err := gridscale.NewClient(c.UserId, c.AuthToken, c.Endpoint)
 	if err != nil {
 		return err
 	}
