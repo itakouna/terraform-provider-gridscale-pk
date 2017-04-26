@@ -27,7 +27,7 @@ func (c *Config) CreateClient() error {
 	}
 	c.Client = client
 
-	log.Printf("[INFO] Rancher Client configured for url: %s", c.Endpoint)
+	log.Printf("[INFO] GridScale Client configured for url: %s", c.Endpoint)
 
 
 	return nil

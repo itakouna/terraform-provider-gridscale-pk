@@ -15,9 +15,9 @@ func updateServerName(d *schema.ResourceData, api_client *Config, server_id stri
 func updateServerCores(d *schema.ResourceData, api_client *Config, server_id string) () {
 	if d.HasChange("cores") {
 		_, name := d.GetChange("cores")
-		api_client.UpdateServerName(
+		api_client.UpdateServerCores(
 			server_id,
-			name.(string),
+			name.(int),
 		)
 	}
 }
@@ -42,9 +42,10 @@ func updateServerLables(d *schema.ResourceData, api_client *Config, server_id st
 }
 
 func updateServerPower(d *schema.ResourceData, api_client *Config, server_id string) () {
+
 	if d.HasChange("power_on") {
 		if d.Get("power_on").(bool) {
-			api_client.PowerOffServer(server_id,)
+			api_client.PowerOnServer(server_id,)
 		} else {
 			api_client.PowerOffServer(server_id,)
 		}
