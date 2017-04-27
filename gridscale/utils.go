@@ -90,3 +90,21 @@ func updateServerIsoImage(d *schema.ResourceData, api_client *Config, server_id 
 		server_id,
 	)
 }
+
+func updateNetworkName(d *schema.ResourceData, api_client *Config, networkId string) () {
+	if d.HasChange("name") {
+		api_client.UpdateNetworkName(
+			networkId,
+			d.Get("name").(string),
+		)
+	}
+}
+
+func updateNetworkLabels(d *schema.ResourceData, api_client *Config, networkId string) () {
+	if d.HasChange("labels") {
+		api_client.UpdateNetworkLabels(
+			networkId,
+			d.Get("labels").([]string),
+		)
+	}
+}

@@ -28,23 +28,31 @@ func resourceGridScaleServer() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			//"labels":{
-			//	Type: schema.TypeList,
-			//	Elem:     &schema.Schema{Type: schema.TypeString},
-			//	Optional: true,
-			//},
+			"labels":{
+				Type: schema.TypeList,
+				Elem:     &schema.Schema{Type: schema.TypeString},
+				Optional: true,
+			},
 			"power_on": {
 				Type:     schema.TypeBool,
 				Optional: true,
 			},
-			"i": {
+			"location_uuid": {
+				Type:     schema.TypeString,
+				Required: true,
+			},
+			"ip_address": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			//"ip_address": {
-			//	Type:     schema.TypeString,
-			//	Computed: true,
-			//},
+			"storage_id": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"bootdevice": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
 			//"network_id": {
 			//	Type:     schema.TypeString,
 			//	Computed: true,

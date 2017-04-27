@@ -20,26 +20,21 @@ func TestAccGridScaleServer_Basic(t *testing.T) {
 		CheckDestroy: testAccCheckDGridScaleServerDestroyCheck,
 		Steps: []resource.TestStep{
 			resource.TestStep{
-				Config: testAccCheckProfitbricksServerConfig_basic,
+				Config: testAccCheckGridScaleServerConfig_basic,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckGridScaleServerExists("gridscale_server.testserver", &server),
 					testAccCheckGridScaleServerAttributes("gridscale_server.testserver", serverName),
 					resource.TestCheckResourceAttr("gridscale_server.testserver", "name", serverName),
-
 				),
 			},
 			resource.TestStep{
-				Config: testAccCheckProfitbricksServerConfig_update,
+				Config: testAccCheckGridScaleServerConfig_update,
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckGridScaleServerAttributes("gridscale_server.testserver", "updatedserver"),
 					resource.TestCheckResourceAttr("gridscale_server.testserver", "name", "updatedserver"),
 					resource.TestCheckResourceAttr("gridscale_server.testserver", "cores", "2"),
 					resource.TestCheckResourceAttr("gridscale_server.testserver", "memory", "2"),
-					resource.TestCheckResourceAttr("gridscale_server.testserver", "power_on",  "1"),
-
-
-
-
+					resource.TestCheckResourceAttr("gridscale_server.testserver", "power_on",  "true"),
 				),
 			},
 		},
@@ -103,7 +98,7 @@ func testAccCheckGridScaleServerExists(n string, server *gridscale.Server) resou
 	}
 }
 
-const testAccCheckProfitbricksServerConfig_basic = `
+const testAccCheckGridScaleServerConfig_basic = `
 resource "gridscale_server" "testserver" {
   name = "testserver"
   cores = 1
@@ -111,11 +106,11 @@ resource "gridscale_server" "testserver" {
   location_uuid = "45ed677b-3702-4b36-be2a-a2eab9827950"
 }`
 
-const testAccCheckProfitbricksServerConfig_update = `
+const testAccCheckGridScaleServerConfig_update = `
 resource "gridscale_server" "testserver" {
   name = "updatedserver"
   cores = 2
   memory = 2
-  power_on = 1
+  power_on = true
   location_uuid = "45ed677b-3702-4b36-be2a-a2eab9827950"
 }`
