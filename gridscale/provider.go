@@ -33,7 +33,7 @@ func Provider() terraform.ResourceProvider {
 		ResourcesMap: map[string]*schema.Resource{
 			"gridscale_server": resourceGridScaleServer(),
 			"gridscale_network": resourceGridScaleNetwork(),
-
+			"gridscale_storage": resourceGridScaleStorage(),
 		},
 
 		ConfigureFunc: providerConfigure,

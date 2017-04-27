@@ -12,6 +12,10 @@ func resourceGridScaleServer() *schema.Resource {
 		Delete: resourceGridScaleServerDelete,
 		Schema: map[string]*schema.Schema{
 			//Server parameters
+			"location_uuid": {
+				Type:     schema.TypeString,
+				Required: true,
+			},
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
@@ -37,30 +41,27 @@ func resourceGridScaleServer() *schema.Resource {
 				Type:     schema.TypeBool,
 				Optional: true,
 			},
-			"location_uuid": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
+
 			"ip_address": {
 				Type:     schema.TypeString,
-				Computed: true,
+				Optional: true,
 			},
 			"storage_id": {
 				Type:     schema.TypeString,
-				Computed: true,
+				Optional: true,
 			},
 			"bootdevice": {
 				Type:     schema.TypeBool,
-				Computed: true,
+				Optional: true,
 			},
-			//"network_id": {
-			//	Type:     schema.TypeString,
-			//	Computed: true,
-			//},
-			//"ordering": {
-			//	Type:     schema.TypeInt,
-			//	Computed: true,
-			//},
+			"network_id": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"ordering": {
+				Type:     schema.TypeInt,
+				Optional: true,
+			},
 		},
 	}
 }
@@ -98,15 +99,15 @@ func resourceGridScaleServerRead(d *schema.ResourceData, meta interface{}) error
 
 func resourceGridScaleServerUpdate(d *schema.ResourceData, meta interface{}) error {
 	api_client := meta.(*Config)
-	server_id := d.Id()
+	serverId := d.Id()
 
-	updateServerName(d, api_client, server_id)
-	updateServerCores(d, api_client, server_id)
-	updateServerMemory(d, api_client, server_id)
-	//updateServerNetwork(d,api_client, server_id)
-	//updateServerStorage(d,api_client, server_id)
-	//updateServerPower(d,api_client, server_id)
-	updateServerIsoImage(d,api_client, server_id)
+	updateServerName(d, api_client, serverId)
+	updateServerCores(d, api_client, serverId)
+	updateServerMemory(d, api_client, serverId)
+	updateServerNetwork(d,api_client, serverId)
+	updateServerStorage(d,api_client, serverId)
+	//updateServerPower(d,api_client, serverId)
+	updateServerIsoImage(d,api_client, serverId)
 
 	return resourceGridScaleServerRead(d, meta)
 }
@@ -114,8 +115,8 @@ func resourceGridScaleServerUpdate(d *schema.ResourceData, meta interface{}) err
 
 func resourceGridScaleServerDelete(d *schema.ResourceData, meta interface{}) error {
 	api_client := meta.(*Config)
-	server_id := d.Id()
-	err := api_client.DeleteServer(server_id)
+	serverId := d.Id()
+	err := api_client.DeleteServer(serverId)
 
 	if err != nil {
 		return err

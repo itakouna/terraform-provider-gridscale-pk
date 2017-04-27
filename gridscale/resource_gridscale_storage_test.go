@@ -10,57 +10,57 @@ import (
 
 
 
-func TestAccGridScale_Basic(t *testing.T) {
-	var network gridscale.Network
-	networkName := "testnetwork"
+func TestAccGridScaleStorage_Basic(t *testing.T) {
+	var storage gridscale.Storage
+	storageName := "teststorage"
 
 	resource.Test(t, resource.TestCase{
 		PreCheck: func() {testAccPreCheck(t)},
 		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckDGridScaleNetworkDestroyCheck,
+		CheckDestroy: testAccCheckDGridScaleStorageDestroyCheck,
 		Steps: []resource.TestStep{
 			resource.TestStep{
-				Config: testAccCheckGridScaleNetworkConfig_basic,
+				Config: testAccCheckGridScaleStorageConfig_basic,
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckGridScaleNetworkExists("gridscale_network.testnetwork", &network),
-					testAccCheckGridScaleNetworkAttributes("gridscale_network.testnetwork", networkName),
-					resource.TestCheckResourceAttr("gridscale_network.testnetwork", "name", networkName),
+					testAccCheckGridScaleStorageExists("gridscale_storage.teststorage", &storage),
+					testAccCheckGridScaleStorageAttributes("gridscale_storage.teststorage", storageName),
+					resource.TestCheckResourceAttr("gridscale_storage.teststorage", "name", storageName),
 				),
 			},
 			resource.TestStep{
-				Config: testAccCheckGridScaleNetworkConfig_update,
+				Config: testAccCheckGridScaleStorageConfig_update,
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckGridScaleNetworkAttributes("gridscale_network.testnetwork", "updatednetwork"),
-					resource.TestCheckResourceAttr("gridscale_network.testnetwork", "name", "updatednetwork"),
-
+					testAccCheckGridScaleStorageAttributes("gridscale_storage.teststorage", "updatedstorage"),
+					resource.TestCheckResourceAttr("gridscale_storage.teststorage", "name", "updatedstorage"),
+					resource.TestCheckResourceAttr("gridscale_storage.teststorage", "capacity", "2"),
 				),
 			},
 		},
 	})
 }
 
-func testAccCheckDGridScaleNetworkDestroyCheck(s *terraform.State) error {
+func testAccCheckDGridScaleStorageDestroyCheck(s *terraform.State) error {
 	client := testAccProvider.Meta().(*Config)
 	for _, rs := range s.RootModule().Resources {
-		sever, _ := client.GetNetwork(rs.Primary.ID)
-		if sever == nil {
+		storage, _ := client.GetStorage(rs.Primary.ID)
+		if storage == nil {
 			return nil
 		}
-		err := client.DeleteNetwork(rs.Primary.ID)
-		if err != nil {
-			return fmt.Errorf("Network %s was not deleted: error to %s", rs.Primary.ID, err)
-		}
+		client.DeleteStorage(rs.Primary.ID)
+		/*if err != nil {
+			return fmt.Errorf("Storage %s was not deleted: error to %s", rs.Primary.ID, err)
+		}*/
 	}
 
 	return nil
 }
 
-func testAccCheckGridScaleNetworkAttributes(n string, name string) resource.TestCheckFunc {
+func testAccCheckGridScaleStorageAttributes(n string, name string) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		rs, ok := s.RootModule().Resources[n]
 
 		if !ok {
-			return fmt.Errorf("testAccCheckGridScaleNetworkAttributes: Not found: %s", name)
+			return fmt.Errorf("testAccCheckGridScaleStorageAttributes: Not found: %s", name)
 		}
 		if rs.Primary.Attributes["name"] != name {
 			return fmt.Errorf("Bad name: %s", rs.Primary.Attributes["name"])
@@ -69,26 +69,26 @@ func testAccCheckGridScaleNetworkAttributes(n string, name string) resource.Test
 	}
 }
 
-func testAccCheckGridScaleNetworkExists(n string, network *gridscale.Network) resource.TestCheckFunc {
+func testAccCheckGridScaleStorageExists(n string, storage *gridscale.Storage) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		client := testAccProvider.Meta().(*Config)
 
 		rs, ok := s.RootModule().Resources[n]
 
 		if !ok {
-			return fmt.Errorf("testAccCheckGridScaleNetworkExists: Not found: %s", s.RootModule())
+			return fmt.Errorf("testAccCheckGridScaleStorageExists: Not found: %s", s.RootModule())
 		}
 
 		if rs.Primary.ID == "" {
 			return fmt.Errorf("No Record ID is set")
 		}
 
-		foundNetwork, status := client.GetNetwork(rs.Primary.ID)
+		foundStorage, status := client.GetStorage(rs.Primary.ID)
 
 		if status != nil {
-			return fmt.Errorf("Error occured while fetching Network: %s", rs.Primary.ID)
+			return fmt.Errorf("Error occured while fetching Storage: %s", rs.Primary.ID)
 		}
-		if foundNetwork.ID != rs.Primary.ID {
+		if foundStorage.ID != rs.Primary.ID {
 			return fmt.Errorf("Record not found")
 		}
 
@@ -96,15 +96,16 @@ func testAccCheckGridScaleNetworkExists(n string, network *gridscale.Network) re
 	}
 }
 
-const testAccCheckGridScaleNetworkConfig_basic = `
-resource "gridscale_network" "testnetwork" {
-  name = "testnetwork"
-  l2security = "true"
+const testAccCheckGridScaleStorageConfig_basic = `
+resource "gridscale_storage" "teststorage" {
+  name = "teststorage"
+  capacity = "1"
   location_uuid = "45ed677b-3702-4b36-be2a-a2eab9827950"
 }`
 
-const testAccCheckGridScaleNetworkConfig_update = `
-resource "gridscale_network" "testnetwork" {
-  name = "updatednetwork"
+const testAccCheckGridScaleStorageConfig_update = `
+resource "gridscale_storage" "teststorage" {
+  name = "updatedstorage"
+  capacity = "2"
   location_uuid = "45ed677b-3702-4b36-be2a-a2eab9827950"
 }`

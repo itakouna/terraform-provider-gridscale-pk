@@ -10,7 +10,7 @@ import (
 
 
 
-func TestAccGridScale_Basic(t *testing.T) {
+func TestAccGridScaleNetwork_Basic(t *testing.T) {
 	var network gridscale.Network
 	networkName := "testnetwork"
 
@@ -42,8 +42,8 @@ func TestAccGridScale_Basic(t *testing.T) {
 func testAccCheckDGridScaleNetworkDestroyCheck(s *terraform.State) error {
 	client := testAccProvider.Meta().(*Config)
 	for _, rs := range s.RootModule().Resources {
-		sever, _ := client.GetNetwork(rs.Primary.ID)
-		if sever == nil {
+		network, _ := client.GetNetwork(rs.Primary.ID)
+		if network == nil {
 			return nil
 		}
 		err := client.DeleteNetwork(rs.Primary.ID)

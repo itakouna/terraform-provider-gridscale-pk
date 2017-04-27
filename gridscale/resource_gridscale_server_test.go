@@ -35,6 +35,10 @@ func TestAccGridScaleServer_Basic(t *testing.T) {
 					resource.TestCheckResourceAttr("gridscale_server.testserver", "cores", "2"),
 					resource.TestCheckResourceAttr("gridscale_server.testserver", "memory", "2"),
 					resource.TestCheckResourceAttr("gridscale_server.testserver", "power_on",  "true"),
+					resource.TestCheckResourceAttr("gridscale_server.testserver", "ordering",  "1"),
+					resource.TestCheckResourceAttr("gridscale_server.testserver", "bootdevice",  "true"),
+
+
 				),
 			},
 		},
@@ -104,13 +108,30 @@ resource "gridscale_server" "testserver" {
   cores = 1
   memory = 1
   location_uuid = "45ed677b-3702-4b36-be2a-a2eab9827950"
-}`
+}
+`
 
 const testAccCheckGridScaleServerConfig_update = `
+resource "gridscale_storage" "serverstorage" {
+  name = "servertorage"
+  capacity = "1"
+  location_uuid = "45ed677b-3702-4b36-be2a-a2eab9827950"
+}
+
+resource "gridscale_network" "servernetwork" {
+  name = "servernetwork"
+  l2security = "true"
+  location_uuid = "45ed677b-3702-4b36-be2a-a2eab9827950"
+}
+
 resource "gridscale_server" "testserver" {
+  location_uuid = "45ed677b-3702-4b36-be2a-a2eab9827950"
   name = "updatedserver"
   cores = 2
   memory = 2
   power_on = true
-  location_uuid = "45ed677b-3702-4b36-be2a-a2eab9827950"
+  storage_id = "${gridscale_storage.serverstorage.id}"
+  bootdevice = true
+  network_id = "${gridscale_network.servernetwork.id}"
+  ordering = 1
 }`
