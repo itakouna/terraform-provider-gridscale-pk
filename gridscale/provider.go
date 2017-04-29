@@ -3,7 +3,6 @@ package gridscale
 import (
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/hashicorp/terraform/terraform"
-	// "github.com/rancher/go-rancher/client"
 )
 
 // Provider returns a terraform.ResourceProvider.
